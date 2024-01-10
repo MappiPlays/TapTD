@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: NewEnemyConfig
   m_EditorClassIdentifier: 
   EnemyPrefab: {fileID: 5427976643038509687, guid: 4effd08a87cbaa849b3ef53735c0ee64, type: 3}
-  health: 1
+  health: 5
   movementSpeed: 1
   drops:
     _serializedList:
