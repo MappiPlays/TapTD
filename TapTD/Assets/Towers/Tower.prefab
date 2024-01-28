@@ -99,9 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 544c82d54e4ab024ca8dd84a68be2660, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 32212938855596444, guid: 7bdf2b94a6ce6af40aa53c877088de23, type: 3}
-  damage: 1
-  attackDelay: 1
+  Config: {fileID: 11400000, guid: e4c7e9b33d3905642899b204d97decad, type: 2}
   attackArea: {fileID: 3803924884727570715}
 --- !u!58 &6784358019681493105
 CircleCollider2D:

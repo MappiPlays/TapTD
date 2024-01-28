@@ -27,8 +27,12 @@ namespace TapTD.Towers
 
         private void Accept()
         {
+            if (GameManager.Instance.Inventory.Money < tower.Config.price)
+                return;
+
             if (tower.CanBePlaced)
             {
+                GameManager.Instance.Inventory.Money -= tower.Config.price;
                 tower.SetState(Enums.TowerStates.Placed);
                 Destroy(gameObject);
             }

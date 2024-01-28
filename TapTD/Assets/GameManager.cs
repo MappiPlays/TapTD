@@ -1,5 +1,6 @@
 using UnityEngine;
 using TapTD.UI;
+using TapTD.InventoryManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     public UIManager UIManager;
+    [SerializeField]
+    public Inventory Inventory;
 
     private void Awake()
     {

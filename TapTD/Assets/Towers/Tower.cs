@@ -8,17 +8,16 @@ namespace TapTD.Towers
     public class Tower : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField]
-        private GameObject bulletPrefab;
-        [SerializeField]
-        private float damage;
-        [SerializeField]
-        private float attackDelay;
+        public TowerConfig Config;
         [SerializeField]
         private AttackArea attackArea;
 
         public bool CanBePlaced { get; private set; }
 
         private Enums.TowerStates state;
+        private GameObject bulletPrefab;
+        private float damage;
+        private float attackDelay;
 
         private List<Enemy> enemiesInRange = new List<Enemy>();
         private Coroutine aimAndAttackCoroutine;
@@ -26,6 +25,16 @@ namespace TapTD.Towers
         private void Start()
         {
             SetState(Enums.TowerStates.Moving);
+
+            if (Config == null)
+            {
+                Debug.LogError("This Tower has no TowerConfig");
+                return;
+            }
+
+            bulletPrefab = Config.bulletPrefab;
+            damage = Config.damage;
+            attackDelay = Config.attackDelay;
         }
 
         private void OnDestroy()
