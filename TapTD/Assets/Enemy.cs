@@ -1,3 +1,4 @@
+using System.Collections;
 using TapTD.InventoryManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -42,6 +43,7 @@ public class Enemy : MonoBehaviour, IPointerClickHandler
     public void ReduceHealth(float damage)
     {
         SetHealth(health - damage);
+        StartCoroutine(PlayDamageAnimation());
     }
 
     private void Die()
@@ -76,5 +78,18 @@ public class Enemy : MonoBehaviour, IPointerClickHandler
     public void OnReachedEnd()
     {
         Destroy(gameObject);
+    }
+
+    private IEnumerator PlayDamageAnimation()
+    {
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        float timer = 0f;
+        float animationTime = .25f;
+        while(timer <= animationTime)
+        {
+            spriteRenderer.color = Color.Lerp(Color.red, Color.white, timer / animationTime);
+            timer += Time.deltaTime;
+            yield return null;
+        }
     }
 }

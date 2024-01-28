@@ -6,6 +6,7 @@ public class EndOfPath : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        collision.GetComponent<Enemy>()?.OnReachedEnd();
+        if (collision.TryGetComponent<Enemy>(out var enemy))
+            enemy.OnReachedEnd();
     }
 }
