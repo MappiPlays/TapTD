@@ -1,16 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class TowerCard : MonoBehaviour
+namespace TapTD.Towers
 {
-    [SerializeField]
-    private GameObject TowerPrefab;
-
-    public void OnButtonClicked()
+    public class TowerCard : MonoBehaviour
     {
-        Tower newTower = Instantiate(TowerPrefab).GetComponent<Tower>();
-        GameManager.Instance.UIManager.LoadTowerPlacementUI(newTower);
+        [SerializeField]
+        private GameObject TowerPrefab;
+
+        public void OnButtonClicked()
+        {
+            Tower newTower = Instantiate(TowerPrefab).GetComponent<Tower>();
+            GameManager.Instance.UIManager.LoadTowerPlacementUI(newTower);
+        }
     }
 }

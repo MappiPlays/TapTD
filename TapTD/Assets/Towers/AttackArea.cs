@@ -1,55 +1,56 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackArea : MonoBehaviour
+namespace TapTD.Towers
 {
-    private Tower tower;
-    private bool isVisible;
-
-    private void Awake()
+    public class AttackArea : MonoBehaviour
     {
-        tower = GetComponentInParent<Tower>();
-    }
+        private Tower tower;
+        private bool isVisible;
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (!collision.CompareTag("Enemy"))
-            return;
-
-        tower.EnemyEnterRange(collision.gameObject.GetComponent<Enemy>());
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (!collision.CompareTag("Enemy"))
-            return;
-
-        tower.EnemyExitRange(collision.gameObject.GetComponent<Enemy>());
-    }
-
-    public void SetVisibility(bool visible)
-    {
-        if (isVisible != visible)
+        private void Awake()
         {
-            ToggleVisibility();
+            tower = GetComponentInParent<Tower>();
         }
-    }
 
-    public void ToggleVisibility()
-    {
-        isVisible = !isVisible;
-        GetComponent<SpriteRenderer>().enabled = isVisible;
-        //GetComponent<LineRenderer>().enabled = isVisible;
-    }
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (!collision.CompareTag("Enemy"))
+                return;
 
-    public void Deactivate()
-    {
-        GetComponent<Collider2D>().enabled = false;
-    }
+            tower.EnemyEnterRange(collision.gameObject.GetComponent<Enemy>());
+        }
 
-    public void Activate()
-    {
-        GetComponent<Collider2D>().enabled = true;
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            if (!collision.CompareTag("Enemy"))
+                return;
+
+            tower.EnemyExitRange(collision.gameObject.GetComponent<Enemy>());
+        }
+
+        public void SetVisibility(bool visible)
+        {
+            if (isVisible != visible)
+            {
+                ToggleVisibility();
+            }
+        }
+
+        public void ToggleVisibility()
+        {
+            isVisible = !isVisible;
+            GetComponent<SpriteRenderer>().enabled = isVisible;
+            //GetComponent<LineRenderer>().enabled = isVisible;
+        }
+
+        public void Deactivate()
+        {
+            GetComponent<Collider2D>().enabled = false;
+        }
+
+        public void Activate()
+        {
+            GetComponent<Collider2D>().enabled = true;
+        }
     }
 }

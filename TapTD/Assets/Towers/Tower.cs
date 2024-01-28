@@ -3,167 +3,170 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Tower : MonoBehaviour, IPointerClickHandler
+namespace TapTD.Towers
 {
-    [SerializeField]
-    private GameObject bulletPrefab;
-    [SerializeField]
-    private float damage;
-    [SerializeField]
-    private float attackDelay;
-    [SerializeField]
-    private AttackArea attackArea;
-
-    public bool CanBePlaced {  get; private set; }
-
-    private Enums.TowerStates state;
-
-    private List<Enemy> enemiesInRange = new List<Enemy>();
-    private Coroutine aimAndAttackCoroutine;
-
-    private void Start()
+    public class Tower : MonoBehaviour, IPointerClickHandler
     {
-        SetState(Enums.TowerStates.Moving);
-    }
+        [SerializeField]
+        private GameObject bulletPrefab;
+        [SerializeField]
+        private float damage;
+        [SerializeField]
+        private float attackDelay;
+        [SerializeField]
+        private AttackArea attackArea;
 
-    private void OnDestroy()
-    {
-        StopAllCoroutines();
-    }
+        public bool CanBePlaced { get; private set; }
 
-    public void EnemyEnterRange(Enemy enemy)
-    {
-        enemiesInRange.Add(enemy);
+        private Enums.TowerStates state;
 
-        aimAndAttackCoroutine ??= StartCoroutine(AimAndAttackCo());
-    }
+        private List<Enemy> enemiesInRange = new List<Enemy>();
+        private Coroutine aimAndAttackCoroutine;
 
-    public void EnemyExitRange(Enemy enemy)
-    {
-        if (enemiesInRange.Contains(enemy))
+        private void Start()
         {
-            enemiesInRange.Remove(enemy);
+            SetState(Enums.TowerStates.Moving);
         }
-    }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        switch(state)
+        private void OnDestroy()
         {
-            case Enums.TowerStates.Placed:
-                float clickToCenterDistance = Vector2.Distance(Camera.main.ScreenToWorldPoint(eventData.position), transform.position);
-                if (clickToCenterDistance < .5f)
-                    attackArea.ToggleVisibility();
-                break;
-            case Enums.TowerStates.Moving:
-                break;
-            default:
-                break;
+            StopAllCoroutines();
         }
-    }
-    
-    private IEnumerator AimAndAttackCo()
-    {
-        Enemy targetEnemy;
-        Vector2 towardsEnemy;
-        float timer = attackDelay;
-        while(enemiesInRange.Count > 0)
-        {
-            targetEnemy = enemiesInRange[0];
-            towardsEnemy = targetEnemy.transform.position - transform.position;
-            transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(towardsEnemy.y, towardsEnemy.x) * Mathf.Rad2Deg - 90);
 
-            if(timer >= attackDelay)
+        public void EnemyEnterRange(Enemy enemy)
+        {
+            enemiesInRange.Add(enemy);
+
+            aimAndAttackCoroutine ??= StartCoroutine(AimAndAttackCo());
+        }
+
+        public void EnemyExitRange(Enemy enemy)
+        {
+            if (enemiesInRange.Contains(enemy))
             {
-                Attack(targetEnemy, transform.rotation);
-                timer -= attackDelay;
+                enemiesInRange.Remove(enemy);
             }
-            timer += Time.deltaTime;
-            yield return null;
         }
-        aimAndAttackCoroutine = null;
-    }
 
-    private void Attack(Enemy target, Quaternion bulletRotation)
-    {
-        Bullet bullet = Instantiate(bulletPrefab, transform.position, bulletRotation).GetComponent<Bullet>();
-        bullet.Setup(damage, target);
-    }
-
-    public void SetState(Enums.TowerStates newState)
-    {
-        state = newState;
-        switch(newState)
+        public void OnPointerClick(PointerEventData eventData)
         {
-            case Enums.TowerStates.Moving:
-                EnteredStateMoving();
-                break;
-            case Enums.TowerStates.Placed:
-                EnteredStatePlaced();
-                break;
-            default:
-                break;
+            switch (state)
+            {
+                case Enums.TowerStates.Placed:
+                    float clickToCenterDistance = Vector2.Distance(Camera.main.ScreenToWorldPoint(eventData.position), transform.position);
+                    if (clickToCenterDistance < .5f)
+                        attackArea.ToggleVisibility();
+                    break;
+                case Enums.TowerStates.Moving:
+                    break;
+                default:
+                    break;
+            }
         }
-    }
 
-    private void EnteredStateMoving()
-    {
-        StartCoroutine(MovingCo());
-        GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, .5f);
-        attackArea.SetVisibility(true);
-        attackArea.Deactivate();
-        if (aimAndAttackCoroutine != null)
+        private IEnumerator AimAndAttackCo()
         {
-            StopCoroutine(aimAndAttackCoroutine);
+            Enemy targetEnemy;
+            Vector2 towardsEnemy;
+            float timer = attackDelay;
+            while (enemiesInRange.Count > 0)
+            {
+                targetEnemy = enemiesInRange[0];
+                towardsEnemy = targetEnemy.transform.position - transform.position;
+                transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(towardsEnemy.y, towardsEnemy.x) * Mathf.Rad2Deg - 90);
+
+                if (timer >= attackDelay)
+                {
+                    Attack(targetEnemy, transform.rotation);
+                    timer -= attackDelay;
+                }
+                timer += Time.deltaTime;
+                yield return null;
+            }
             aimAndAttackCoroutine = null;
         }
-    }
 
-    private void EnteredStatePlaced()
-    {
-        gameObject.layer = LayerMask.NameToLayer("OccupiedArea");
-        GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
-        attackArea.SetVisibility(false);
-        attackArea.Activate();
-    }
-
-    private IEnumerator MovingCo()
-    {
-        Collider2D collider = GetComponent<Collider2D>();
-        List<Collider2D> collisions = new();
-        ContactFilter2D contactFilter = new();
-        contactFilter.SetLayerMask(LayerMask.GetMask("OccupiedArea"));
-        while(state == Enums.TowerStates.Moving)
+        private void Attack(Enemy target, Quaternion bulletRotation)
         {
-            if (Input.touchCount > 0)
+            Bullet bullet = Instantiate(bulletPrefab, transform.position, bulletRotation).GetComponent<Bullet>();
+            bullet.Setup(damage, target);
+        }
+
+        public void SetState(Enums.TowerStates newState)
+        {
+            state = newState;
+            switch (newState)
             {
-                List<RaycastResult> results = new();
-                if (!GameManager.Instance.UIManager.IsScreenPositionOnUI(Input.touches[0].position))
-                {
-                    Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.touches[0].position);
-                    transform.position = touchPosition;
-                }
+                case Enums.TowerStates.Moving:
+                    EnteredStateMoving();
+                    break;
+                case Enums.TowerStates.Placed:
+                    EnteredStatePlaced();
+                    break;
+                default:
+                    break;
             }
-
-            SetCanBePlaced(collider.OverlapCollider(contactFilter, collisions) <= 0);
-
-            yield return null;
         }
-    }
 
-    private void SetCanBePlaced(bool placable)
-    {
-        CanBePlaced = placable;
-
-        SpriteRenderer attackAreaSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
-
-        if (CanBePlaced)
+        private void EnteredStateMoving()
         {
-            attackAreaSpriteRenderer.color = Color.green;
+            StartCoroutine(MovingCo());
+            GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, .5f);
+            attackArea.SetVisibility(true);
+            attackArea.Deactivate();
+            if (aimAndAttackCoroutine != null)
+            {
+                StopCoroutine(aimAndAttackCoroutine);
+                aimAndAttackCoroutine = null;
+            }
         }
-        else
+
+        private void EnteredStatePlaced()
         {
-            attackAreaSpriteRenderer.color = Color.red;
+            gameObject.layer = LayerMask.NameToLayer("OccupiedArea");
+            GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+            attackArea.SetVisibility(false);
+            attackArea.Activate();
+        }
+
+        private IEnumerator MovingCo()
+        {
+            Collider2D collider = GetComponent<Collider2D>();
+            List<Collider2D> collisions = new();
+            ContactFilter2D contactFilter = new();
+            contactFilter.SetLayerMask(LayerMask.GetMask("OccupiedArea"));
+            while (state == Enums.TowerStates.Moving)
+            {
+                if (Input.touchCount > 0)
+                {
+                    List<RaycastResult> results = new();
+                    if (!GameManager.Instance.UIManager.IsScreenPositionOnUI(Input.touches[0].position))
+                    {
+                        Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.touches[0].position);
+                        transform.position = touchPosition;
+                    }
+                }
+
+                SetCanBePlaced(collider.OverlapCollider(contactFilter, collisions) <= 0);
+
+                yield return null;
+            }
+        }
+
+        private void SetCanBePlaced(bool placable)
+        {
+            CanBePlaced = placable;
+
+            SpriteRenderer attackAreaSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+            if (CanBePlaced)
+            {
+                attackAreaSpriteRenderer.color = Color.green;
+            }
+            else
+            {
+                attackAreaSpriteRenderer.color = Color.red;
+            }
         }
     }
 }

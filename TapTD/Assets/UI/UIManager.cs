@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TapTD.InventoryManagement;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using TapTD.Towers;
 
 namespace TapTD.UI
 {
