@@ -23,9 +23,10 @@ namespace TapTD.UI
                 Debug.LogError("There is no TowerPrefab on this TowerCard");
                 return;
             }
-
-            price = towerPrefab.GetComponent<Tower>().Config.price;
+            TowerConfig towerConfig = towerPrefab.GetComponent<Tower>().Config;
+            price = towerConfig.price;
             priceText.text = price.ToString();
+            image.sprite = towerConfig.sprite;
         }
 
         public void OnButtonClicked()

@@ -4,6 +4,9 @@ namespace TapTD.Towers
 {
     public class AttackArea : MonoBehaviour
     {
+        [SerializeField]
+        private Collider2D rangeTrigger;
+
         private Tower tower;
         private bool isVisible;
 
@@ -45,12 +48,17 @@ namespace TapTD.Towers
 
         public void Deactivate()
         {
-            GetComponent<Collider2D>().enabled = false;
+            rangeTrigger.enabled = false;
         }
 
         public void Activate()
         {
-            GetComponent<Collider2D>().enabled = true;
+            rangeTrigger.enabled = true;
+        }
+
+        public void SetRange(float range)
+        {
+            rangeTrigger.transform.localScale = new Vector3 (range, range, 1);
         }
     }
 }

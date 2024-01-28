@@ -32,9 +32,11 @@ namespace TapTD.Towers
                 return;
             }
 
+            GetComponent<SpriteRenderer>().sprite = Config.sprite;
             bulletPrefab = Config.bulletPrefab;
             damage = Config.damage;
             attackDelay = Config.attackDelay;
+            attackArea.SetRange(Config.range);
         }
 
         private void OnDestroy()

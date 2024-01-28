@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 237e021bbed06d048a33f42a0f59a067, type: 3}
-  m_Name: Tower1Config
+  m_Name: TowerConfig
   m_EditorClassIdentifier: 
-  sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   bulletPrefab: {fileID: 32212938855596444, guid: 7bdf2b94a6ce6af40aa53c877088de23, type: 3}
-  price: 25
-  damage: 2.5
-  attackDelay: 2
-  range: 2
+  price: 10
+  damage: 1
+  attackDelay: 1
+  range: 2.5
