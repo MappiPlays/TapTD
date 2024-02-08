@@ -17,4 +17,4 @@ MonoBehaviour:
   price: 25
   damage: 2.5
   attackDelay: 2
-  range: 2
+  range: 1.5

@@ -7,10 +7,13 @@ using UnityEngine.Splines;
 public class Enemy : MonoBehaviour, IPointerClickHandler
 {
     public EnemyConfig Config;
+    public float PathProgress;
 
     private float health;
 
     private bool isAlive = true;
+
+    private SplineAnimate splineAnimate;
 
     private void Start()
     {
@@ -26,9 +29,14 @@ public class Enemy : MonoBehaviour, IPointerClickHandler
 
         GetComponent<SpriteRenderer>().sprite = Config.sprite;
 
-        SplineAnimate splineAnimate = GetComponent<SplineAnimate>();
+        splineAnimate = GetComponent<SplineAnimate>();
         splineAnimate.AnimationMethod = SplineAnimate.Method.Speed;
         splineAnimate.MaxSpeed = Config.movementSpeed;
+    }
+
+    private void Update()
+    {
+        PathProgress = splineAnimate.NormalizedTime;
     }
 
     private void SetHealth(float newHealth)

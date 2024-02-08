@@ -82,6 +82,7 @@ namespace TapTD.Towers
             float timer = attackDelay;
             while (enemiesInRange.Count > 0)
             {
+                enemiesInRange.Sort((e1, e2) => e2.PathProgress.CompareTo(e1.PathProgress));
                 targetEnemy = enemiesInRange[0];
                 towardsEnemy = targetEnemy.transform.position - transform.position;
                 transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(towardsEnemy.y, towardsEnemy.x) * Mathf.Rad2Deg - 90);

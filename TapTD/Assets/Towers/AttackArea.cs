@@ -58,7 +58,7 @@ namespace TapTD.Towers
 
         public void SetRange(float range)
         {
-            rangeTrigger.transform.localScale = new Vector3 (range, range, 1);
+            gameObject.transform.localScale = new Vector3 (2 * range, 2 * range, 1);
         }
     }
 }
