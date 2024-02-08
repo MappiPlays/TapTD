@@ -8,11 +8,13 @@ namespace TapTD.UI
     public class TowerCard : MonoBehaviour
     {
         [SerializeField]
-        private GameObject towerPrefab;
-        [SerializeField]
         private Image image;
         [SerializeField]
         private TextMeshProUGUI priceText;
+        
+        [Header("Tower")]
+        [SerializeField]
+        private GameObject towerPrefab;
 
         private int price;
 
