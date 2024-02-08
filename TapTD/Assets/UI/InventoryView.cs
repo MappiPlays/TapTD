@@ -13,6 +13,7 @@ public class InventoryView : MonoBehaviour
     private void Start()
     {
         FillResourceView();
+        gameObject.SetActive(false);
     }
 
     private void FillResourceView()

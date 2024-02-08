@@ -6,8 +6,8 @@ namespace TapTD.InventoryManagement
     public class Inventory : MonoBehaviour
     {
         [SerializeField]
-        private float money;
-        public float Money
+        private int money;
+        public int Money
         {
             get { return money; }
             set
@@ -16,7 +16,16 @@ namespace TapTD.InventoryManagement
                 GameManager.Instance.UIManager.UpdateMoney();
             }
         }
-        public float Jewels;
+        public int Jewels;
         public SerializedDictionary<Enums.ResourceTypes, int> Resources;
+
+        public void AddResource(Enums.ResourceTypes resourceType, int amount = 1)
+        {
+            if (!Resources.ContainsKey(resourceType))
+                return;
+
+            Resources[resourceType] += amount;
+            GameManager.Instance.UIManager.UpdateResourceAmount(resourceType);
+        }
     }
 }

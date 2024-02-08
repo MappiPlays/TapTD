@@ -1,13 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "EnemyConfig", fileName = "NewEnemyConfig")]
 public class EnemyConfig : ScriptableObject
 {
-    public GameObject EnemyPrefab;
+    public Sprite sprite;
     public float health;
     public float movementSpeed;
-    public SerializedDictionary<Enums.DropTypes, float> drops;
+    [Header("Drops")]
+    public SerializedDictionary<Enums.DropTypes, int> dropAmounts;
+    public Enums.ResourceTypes dropResource;
 }

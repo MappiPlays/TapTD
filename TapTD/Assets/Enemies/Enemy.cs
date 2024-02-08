@@ -6,8 +6,7 @@ using UnityEngine.Splines;
 
 public class Enemy : MonoBehaviour, IPointerClickHandler
 {
-    [SerializeField]
-    private EnemyConfig config;
+    public EnemyConfig Config;
 
     private float health;
 
@@ -15,19 +14,21 @@ public class Enemy : MonoBehaviour, IPointerClickHandler
 
     private void Start()
     {
-        if (config == null)
+        if (Config == null)
         {
             Debug.LogError("This Enemy has no EnemyConfig attached");
             return;
         }
-        if (config.health <= 0)
+        if (Config.health <= 0)
             Debug.LogWarning("This Enemys initial health is zero or less");
         
-        SetHealth(config.health);
+        SetHealth(Config.health);
+
+        GetComponent<SpriteRenderer>().sprite = Config.sprite;
 
         SplineAnimate splineAnimate = GetComponent<SplineAnimate>();
         splineAnimate.AnimationMethod = SplineAnimate.Method.Speed;
-        splineAnimate.MaxSpeed = config.movementSpeed;
+        splineAnimate.MaxSpeed = Config.movementSpeed;
     }
 
     private void SetHealth(float newHealth)
@@ -48,10 +49,10 @@ public class Enemy : MonoBehaviour, IPointerClickHandler
 
     private void Die()
     {
-        if(config.drops.Count > 0)
+        if(Config.dropAmounts.Count > 0)
         {
             Inventory inventory = FindObjectOfType<Inventory>();
-            foreach(var drop in config.drops)
+            foreach(var drop in Config.dropAmounts)
             {
                 switch(drop.Key)
                 {
@@ -60,6 +61,9 @@ public class Enemy : MonoBehaviour, IPointerClickHandler
                         break;
                     case Enums.DropTypes.Jewels:
                         inventory.Jewels += drop.Value;
+                        break;
+                    case Enums.DropTypes.Resources:
+                        inventory.AddResource(Config.dropResource, drop.Value); 
                         break;
                     default: 
                         break;

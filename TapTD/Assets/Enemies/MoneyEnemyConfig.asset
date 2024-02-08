@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b66b02b622ed49449c6af89e72a7543, type: 3}
-  m_Name: NewEnemyConfig
+  m_Name: MoneyEnemyConfig
   m_EditorClassIdentifier: 
-  EnemyPrefab: {fileID: 5427976643038509687, guid: 4effd08a87cbaa849b3ef53735c0ee64, type: 3}
+  sprite: {fileID: 21300000, guid: f976a734b765f594094830696c3bd5e5, type: 3}
   health: 5
   movementSpeed: 1
-  drops:
+  dropAmounts:
     _serializedList:
     - Key: 1
       Value: 1
+  dropResource: 0
